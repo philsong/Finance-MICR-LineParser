@@ -1,0 +1,19 @@
+Finance::MICR::LineParser
+
+INSTALLATION
+
+perl Makefile.PL
+make test
+make install
+make clean
+
+
+NOTES: 
+
+You can manually test it via:
+
+	perl t/basic.t
+
+EXAMPLE SCRIPT:
+
+	perl ./example_script/micrline.pl "T136806729T 4392 6342U 1201 34D7"
