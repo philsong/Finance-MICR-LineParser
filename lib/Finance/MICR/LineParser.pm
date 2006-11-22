@@ -2,7 +2,7 @@ package Finance::MICR::LineParser;
 use strict;
 use Carp;
 use warnings;
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.5 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /(\d+)/g;
 
 sub new {
 	my ($class,$self) = (shift,shift);
@@ -531,6 +531,12 @@ Finance::MICR::LineParser - validate and parse a MICR code from a string
 
 =head1 SYNOPSIS
 
+	use Finance::MICR::LineParser;
+	
+	my $micr = new Finance::MICR::LineParser({ string => $string });	
+
+	print "Is this a MICR code? ". $micr->valid;
+
 Imagine you scanned in a check using a standard scanner. And used some OCR sofware to try to
 extract the text from it. It could have a miriad problems, garble, etc - but it's what we have
 to work with. So.. let's create a small cli script that takes potentially garble and tells us
@@ -570,9 +576,11 @@ micrline.pl:
 
 Now in your terminal:
 
+=over 4
+
 perl ./micrline.pl U2323424U_T234244T_2342424U
 	
-
+=back
 
 =head1 DESCRIPTION
 
@@ -600,10 +608,25 @@ For example, I trained my gocr to change ||" to CCc and |: to Aa - so I start an
 
 By default, these are changed to : 
 
-	Transit Symbol: T
-	Ammount Symbol: X
-	On-Us Symbol: U
-	Dash Symbol: D
+=over 4
+
+=item *
+
+Transit Symbol: T
+
+=item *
+
+Ammount Symbol: X
+
+=item *
+
+On-Us Symbol: U
+
+=item *
+
+Dash Symbol: D
+
+=back	
 
 That is, when you query methods such as $micr->on_us, the return on_us value therein is U and not
 CCc.
@@ -624,13 +647,6 @@ Constructor Arguments:
 
 	string: the string you have that you think *is*, or may *contain* a micr string.
 
-	return_my_symbols: boolean. By default it is set to 0. 
-	This means that the return symbols are, even if you specify them different in the arguments
-	to the object constructor. if set to one, it will return *your* symbol equivalents.
-		U on us
-		T transit
-		X ammount
-		D dash
 	
 =head2 valid()
 
@@ -704,11 +720,19 @@ NOTE: a string which is not valid() will not return a micr() code.
 Returns the micr() code somewhat formatted for human eyes. That is..
 If your original string argument to the constructror is 
 
-	3 12 U0000011135U T052000113T 984U0837166   _ 23 1
+=over 4
+
+3 12 U0000011135U T052000113T 984U0837166   _ 23 1
+
+=back
 	
 Then this returns somethign like
 
-	U0000011135U_T052000113T_984U0837166
+=over 4
+
+U0000011135U_T052000113T_984U0837166
+
+=back
 
 NOTE: a string which is not valid() will not return a micr_pretty() code.
 
@@ -718,7 +742,6 @@ Returns true or false. Think of this also as 'gave up'.
 NOTE: A string that ended up not valid() could still return 0 here. This
 is because by default, Finance::MICR::LineParser attempts to match at least
 one of the main MICR fields before giving up.
-
 
 
 =head1 MICR SPECIFIC METHODS
@@ -759,41 +782,41 @@ returns undef if not found.
 returns undef if not found.
 This needs work.
 
-=head2 TRANSIT SUB FIELDS
+=head1 TRANSIT SUB FIELD METHODS
 
 Transit has 9 digits. It is croken into multiple fields:
 
-=head3 routing_number()
+=head2 routing_number()
 
 return routing number. (digits 1-4)
 returns undef if not found.
 
-=head3 bank_number()
+=head2 bank_number()
 
 return bank number (digits 5-8)
 returns undef if not found.
 
-=head3 check_digit()
+=head2 check_digit()
 
 return check digit (one digit)
 returns undef if not found
 
 
-=head2 ON US SUB FIELDS
+=head1 ON US SUB FIELD METHODS
 
-=head3 check_number()
+=head2 check_number()
 
 returns check number, Located in various places in the on us field.
 returns undef if not found
 
-=head3 tpc()
+=head2 tpc()
 
 max 6 characters; Located to right of account number
 returns undef if not found
 TODO: This needs some thought, on a personal check this would be the check
 number, what gives?
 
-=head3 account_number()
+=head2 account_number()
 
 Variable length; always followed by the On Us symbol
 returns undef if not found
@@ -804,15 +827,17 @@ returns undef if not found
 
 =head1 BUGS
 
-Please report bugs.
-
-=head1 TODO
+Please report bugs to developer.
 
 Notice: this module is under development. It is being used for production, but it *is* under development.
-Please notify with hany questions or concerns.
+
+Please notify with hany questions or concerns. I've seen very little on MICR and open source out there. 
+If you have any recommendations, please don't hessitate on letting me know how to make this module better.
 
 This module helps me a lot, and I am hoping it may be of use to others and they may contribute criticism,
 patches, suggestions, etc.
+
+=head1 TODO
 
 Not yet implemented:
 
@@ -830,12 +855,15 @@ If you want to get *your* symbols output back, here's an example:
 
 =head1 AUTHOR
 
-Leo Charre.  
+Leo Charre E<lt>leo@leocharre.comE<gt>
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-Address bug reports and comments to: leo(at)leocharre(dot)com.  
+=head1 BUGS
+
+Address bug reports and comments to: Leo Charre E<lt>leo@leocharre.comE<gt>  
+
 =cut
 
 =head1 SEE ALSO
