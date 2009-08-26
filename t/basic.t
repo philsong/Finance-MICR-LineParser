@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-use Test::Simple tests=>30;
+use Test::Simple tests=>33;
 use strict;
 BEGIN { use Cwd; eval "use lib '".cwd()."/lib';";}	
 require Finance::MICR::LineParser;
@@ -92,4 +92,15 @@ $feedback =  $micrg->status;
 
 
 
+
+my $mc = new Finance::MICR::LineParser({ 
+	string => 'CCc0000014771CCcAa052000113Aa9840837158CCc',
+	on_us_symbol=> 'CCc',
+	transit_symbol => 'Aa',
+});
+ok( $mc->valid);
+ok($mc->get_check_type eq 'b');
+ok($mc->routing_number);
+$feedback =  $micrg->status;
+#### $feedback
 

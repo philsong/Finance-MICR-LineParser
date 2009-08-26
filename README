@@ -1,11 +1,16 @@
 Finance::MICR::LineParser
+=========================
 
-INSTALLATION
+Parse a MICR Line code into parts. Additionally tell us if a string garble contains a MICR code.
+If you have a string and want to parse it as a check's MICR line, this is useful.
 
-perl Makefile.PL
-make test
-make install
-make clean
+I am presently using this module to let the office scan in documents and using gocr, I get a string
+out of the scanned check image. Then with this module I parse the MICR line- if one is there.
+I name the documents for archiving after the MICR code.
+
+INSTALL
+
+See INSTALL
 
 
 NOTES: 

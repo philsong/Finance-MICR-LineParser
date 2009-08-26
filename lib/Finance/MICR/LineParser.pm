@@ -2,7 +2,7 @@ package Finance::MICR::LineParser;
 use strict;
 use Carp;
 use warnings;
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.7 $ =~ /(\d+)/g;
 
 sub new {
 	my ($class,$self) = (shift,shift);
@@ -527,13 +527,13 @@ __END__
 
 =head1 NAME
 
-Finance::MICR::LineParser - validate and parse a MICR code from a string
+Finance::MICR::LineParser - validate and parse a check MICR string
 
 =head1 SYNOPSIS
 
 	use Finance::MICR::LineParser;
 	
-	my $micr = new Finance::MICR::LineParser({ string => $string });	
+	my $micr = Finance::MICR::LineParser->new({ string => $string });	
 
 	print "Is this a MICR code? ". $micr->valid;
 
@@ -576,15 +576,13 @@ micrline.pl:
 
 Now in your terminal:
 
-=over 4
-
-perl ./micrline.pl U2323424U_T234244T_2342424U
+   # perl ./micrline.pl U2323424U_T234244T_2342424U
 	
-=back
 
 =head1 DESCRIPTION
 
 Parse a MICR Line code into parts. Additionally tell us if a string garble contains a MICR code.
+If you have a string and want to parse it as a check's MICR line, this is useful.
 
 I am presently using this module to let the office scan in documents and using gocr, I get a string
 out of the scanned check image. Then with this module I parse the MICR line- if one is there.
@@ -638,15 +636,14 @@ the output.
 
 =head2 new()
 
-argument is anon hash. croaks if no arg provided.
-right now takes a string and tries to find MICR parts
+Argument is anon hash. croaks if no arg provided.
+Right now takes a string and tries to find MICR parts..
 
 	my $m = new Finance::MICR::LineParser ({ string => 'U2323424U_T234244T_2342424U' });
 
 Constructor Arguments:
 
 	string: the string you have that you think *is*, or may *contain* a micr string.
-
 	
 =head2 valid()
 
@@ -657,7 +654,6 @@ check MICR. That is, the fields are there and in the *right order*.
 NOTE that if your code is deemed invalid, you *may* still get field values.
 But your string as a whole should be considered invalid. 
 You should always use valid() before taking the output as gospel.
-
 
 =head2 status()
 
@@ -775,7 +771,6 @@ variable length 19 digits max
 between transit and amount fields (to the right of transit.)
 returns undef if not found.
 
-
 =head2 ammount()
 
 10 digits zero filled; bracketed by two amount symbols
@@ -800,7 +795,6 @@ returns undef if not found.
 
 return check digit (one digit)
 returns undef if not found
-
 
 =head1 ON US SUB FIELD METHODS
 
@@ -853,16 +847,9 @@ If you want to get *your* symbols output back, here's an example:
 	});
 
 
-=head1 AUTHOR
-
-Leo Charre E<lt>leo@leocharre.comE<gt>
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
 =head1 BUGS
 
-Address bug reports and comments to: Leo Charre E<lt>leo@leocharre.comE<gt>  
+Address bug reports and comments to AUTHOR 
 
 =cut
 
@@ -870,4 +857,23 @@ Address bug reports and comments to: Leo Charre E<lt>leo@leocharre.comE<gt>
 
 http://en.wikipedia.org/wiki/Magnetic_ink_character_recognition
 
+=head1 AUTHOR
+
+Leo Charre leocharre at cpan dot org
+
+=head1 COPYRIGHT
+
+Copyright (c) 2009 Leo Charre. All rights reserved.
+
+=head1 LICENSE
+
+This package is free software; you can redistribute it and/or modify it under the same terms as Perl itself, i.e., under the terms of the "Artistic License" or the "GNU General Public License".
+
+=head1 DISCLAIMER
+
+This package is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the "GNU General Public License" for more details.
+
 =cut
+
